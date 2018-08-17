@@ -1,0 +1,11 @@
+version: '3.6'
+services:
+  devserver:
+    build: ./docker-devserver
+    privileged: true
+    command: /sbin/init
+    ports:
+      - "8881:8001"
+      - "8882:8002"
+    volumes:
+      - .:/var/shared

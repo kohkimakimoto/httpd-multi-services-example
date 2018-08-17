@@ -1,0 +1,21 @@
+# /usr/lib/systemd/system/httpd-zwei.service
+[Unit]
+Description=httpd-zwei
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=notify
+EnvironmentFile=/etc/sysconfig/httpd
+Environment=HTTPD_SERVICE_NAME=zwei
+Environment=HTTPD_LISTEN_ADDR=8002
+Environment=HTTPD_USER=apache
+Environment=HTTPD_GROUP=apache
+Environment=HTTPD_DOCUMENT_ROOT=/var/shared/apps/zwei/public
+ExecStart=/usr/sbin/httpd $OPTIONS -f /etc/httpd/conf/httpd-multi-services.conf -DFOREGROUND
+ExecReload=/usr/sbin/httpd $OPTIONS -k graceful
+ExecStop=/bin/kill -WINCH ${MAINPID}
+KillSignal=SIGCONT
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
